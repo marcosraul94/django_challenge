@@ -9,7 +9,7 @@ class MusicalWork(models.Model):
     title: str = models.CharField(max_length=100)
     contributors: str = models.CharField(max_length=255)
 
-    def __str__(self):
+    def __str__(self) -> str:
         return str({'pk': self.pk, 'iswc': self.iswc, 'contributors': self.contributors})
 
     def to_json(self) -> dict:
@@ -17,5 +17,32 @@ class MusicalWork(models.Model):
         model_dict: dict = json.loads(serialized_instance)[0]
         return {'pk': model_dict['pk'], **model_dict['fields']}
 
-    def merge_contributors(self, other_contributors: str):
-        raise not NotImplementedError()
+    def is_another_version(self, a: dict) -> bool:
+        iswc = a.get('iscw')
+
+        if iswc and iswc == self.iswc:
+            return True
+
+        if a.get('title') != self.title:
+            return False
+
+        a_contributors = set(a.get('contributors').split('|'))
+        self_contributors = set(self.contributors.split('|'))
+        intersection = a_contributors.intersection(self_contributors)
+
+        return len(intersection) != 0
+
+    def merge(self, a: dict) -> None:
+        iswc = a.get('iswc')
+
+        # update missing iswc
+        if not self.iswc and iswc:
+            self.iswc = iswc
+
+        # if there are new contributors add them
+        a_contributors = a.get('contributors').split('|')
+        self_contributors = self.contributors.split('|')
+        contributors_set = {*a_contributors, *self_contributors}
+        self.contributors = '|'.join(sorted(contributors_set))
+
+        self.save()

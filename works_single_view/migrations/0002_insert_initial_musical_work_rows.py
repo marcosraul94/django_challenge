@@ -11,6 +11,7 @@ MODEL_NAME = 'MusicalWork'
 
 
 def find_existing_musical_work(musical_work: dict, MusicalWork: MusicalWorkClass) -> Union[MusicalWorkClass, None]:
+    """Find in the db another version of the musical work."""
     title = musical_work.get('title')
     iswc = musical_work.get('iswc')
 
@@ -26,8 +27,8 @@ def find_existing_musical_work(musical_work: dict, MusicalWork: MusicalWorkClass
     return None
 
 
-# Insert records from works_metadata.csv
 def forwards_func(apps, schema_editor):
+    """Insert records from works_metadata.csv"""
     MusicalWork: MusicalWorkClass = apps.get_model(APP_NAME, MODEL_NAME)
     musical_works_to_insert = load_musical_works()
 
@@ -41,8 +42,8 @@ def forwards_func(apps, schema_editor):
             new_musical_work.save()
 
 
-# Rollback inserted records
 def backwards_func(apps, schema_editor):
+    """Rollback inserted musical works records."""
     MusicalWork: MusicalWorkClass = apps.get_model(APP_NAME, MODEL_NAME)
     MusicalWork.objects.all().delete()
 

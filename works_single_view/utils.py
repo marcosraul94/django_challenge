@@ -5,8 +5,8 @@ from typing import Union
 from .models import MusicalWork as MusicalWorkClass
 
 
-APP_PATH = os.path.dirname(os.path.dirname(__file__))
-WORKS_METADATA_FILE_PATH = os.path.join(APP_PATH, 'instructions', 'works_metadata.csv')
+PROJECT_PATH = os.path.dirname(os.path.dirname(__file__))
+WORKS_METADATA_FILE_PATH = os.path.join(PROJECT_PATH, 'instructions', 'works_metadata.csv')
 
 
 def load_musical_works(file_path: str = WORKS_METADATA_FILE_PATH) -> list[dict]:

@@ -34,7 +34,7 @@ class MusicalWork(models.Model):
         return len(intersection) != 0
 
     def merge(self, a: dict) -> None:
-        """Merge another version of the musical work into it and save it."""
+        """Merge another version of the musical work into it."""
         iswc = a.get('iswc')
 
         # update missing iswc
@@ -46,5 +46,3 @@ class MusicalWork(models.Model):
         self_contributors = self.contributors.split('|')
         contributors_set = {*a_contributors, *self_contributors}
         self.contributors = '|'.join(sorted(contributors_set))
-
-        self.save()

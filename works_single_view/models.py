@@ -21,8 +21,8 @@ class MusicalWork(models.Model):
         """Compare it with another musical work data to figure out if it's another version of it."""
         iswc = a.get('iscw')
 
-        if iswc and iswc == self.iswc:
-            return True
+        if iswc and self.iswc:
+            return iswc == self.iswc
 
         if a.get('title') != self.title:
             return False
@@ -34,7 +34,7 @@ class MusicalWork(models.Model):
         return len(intersection) != 0
 
     def merge(self, a: dict) -> None:
-        """Merge another version of the musical work into it."""
+        """Merge another version of the musical work into it and save it."""
         iswc = a.get('iswc')
 
         # update missing iswc

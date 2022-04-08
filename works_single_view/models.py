@@ -18,6 +18,7 @@ class MusicalWork(models.Model):
         return {'pk': model_dict['pk'], **model_dict['fields']}
 
     def is_another_version(self, a: dict) -> bool:
+        """Compare it with another musical work data to figure out if it's another version of it."""
         iswc = a.get('iscw')
 
         if iswc and iswc == self.iswc:
@@ -26,13 +27,14 @@ class MusicalWork(models.Model):
         if a.get('title') != self.title:
             return False
 
-        a_contributors = set(a.get('contributors').split('|'))
-        self_contributors = set(self.contributors.split('|'))
-        intersection = a_contributors.intersection(self_contributors)
+        a_contributors = a.get('contributors').split('|')
+        self_contributors = self.contributors.split('|')
+        intersection = set(a_contributors).intersection(set(self_contributors))
 
         return len(intersection) != 0
 
     def merge(self, a: dict) -> None:
+        """Merge another version of the musical work into it."""
         iswc = a.get('iswc')
 
         # update missing iswc

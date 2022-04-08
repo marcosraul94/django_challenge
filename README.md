@@ -11,6 +11,11 @@ and run any migrations inside the postgres container.
 ## Test endpoint
 For hitting the django backend use `127.0.0.1:3000/musical-work/<iswc>`.
 
+## Running tests
+In order to execute the tests you would need to be inside the django container
+`docker-compose exec api sh`. Once there do `python manage.py test` to run the test
+suits.
+
 ## Questions
 
 #### Describe briefly the matching and reconciling method chosen.
